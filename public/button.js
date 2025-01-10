@@ -31,7 +31,7 @@ const addButtonToCommentBoxes = () => {
       commentBox.appendChild(button);
 
       button.addEventListener('click', () => {
-        const postElement = commentBox.closest('.feed-shared-update-v2'); // Find the parent post
+        const postElement = commentBox.closest('.feed-shared-update-v2');
         const postTextElement =
           postElement?.querySelector('.update-components-text') ||
           postElement?.querySelector('.feed-shared-text__text-view') ||
@@ -43,10 +43,23 @@ const addButtonToCommentBoxes = () => {
         console.log('Post Text:', postText);
 
         if (commentInput) {
-          commentInput.innerHTML = postText;
+          commentInput.innerHTML = '';
 
-          const event = new Event('input', { bubbles: true });
-          commentInput.dispatchEvent(event);
+          let index = 0;
+          const typingSpeed = 5;
+
+          const typeText = () => {
+            if (index < postText.length) {
+              commentInput.innerHTML = postText.slice(0, index + 1);
+              index++;
+              const event = new Event('input', { bubbles: true });
+              commentInput.dispatchEvent(event);
+
+              setTimeout(typeText, typingSpeed);
+            }
+          };
+
+          typeText();
         }
       });
     }
